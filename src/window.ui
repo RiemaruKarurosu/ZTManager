@@ -21,6 +21,7 @@
               <object class="GtkButton" id="addnetwork">
                 <property name="icon-name">list-add</property>
                 <property name="focusable">true</property>
+                <signal name="clicked" handler="on_add_clicked"></signal>
               </object>
             </child>
             <child>

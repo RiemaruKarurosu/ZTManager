@@ -54,9 +54,9 @@ class ZerotierGtkApplication(Adw.Application):
                                 application_name='Zerotier-GTK',
                                 application_icon='org.zerotier.ZerotierGTK',
                                 developer_name='NOT FOR ACTUAL USE',
-                                version='1.4.3 - ALPHA',
+                                version='1.4.4 - ALPHA',
                                 developers=['Riemaru Karurosu'],
-                                copyright='© 2023 Zerotier-GUI',
+                                copyright='© 2024 Zerotier-GUI',
                                 issue_url='https://github.com/RiemaruKarurosu/ZeroTier-GTK/issues')
         about.present()
 

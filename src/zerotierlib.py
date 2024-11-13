@@ -181,9 +181,9 @@ class ZeroTierNetwork:
         return response.json()
 
     def join_networks(self, network):
-        url = self.URL + 'network' + network
+        url = self.URL + 'network/' + network
+        print(url)
         response = requests.post(url, headers=self.headers)
-        print(response.json())
         return response.json()
 
     def update_network(self, network, config):
