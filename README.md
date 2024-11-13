@@ -24,8 +24,8 @@ The following features are planned for inclusion in ZeroTier-GTK:
 - [X] Detect if the zerotier-one service is running
 - [X] Provide the option to start the service
 - [ ] Provide the option to enable the service
-- [ ] Show networks
-- [ ] Add a new network
+- [X] Show networks
+- [X] Add a new network
 - [ ] View detailed settings of a network
 - [ ] Disconnect from a network
 - [ ] Remove a network
