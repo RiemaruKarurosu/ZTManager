@@ -139,3 +139,16 @@ class ZeroTierNetwork:
     def get_peers(self, network: Optional[str] = None):
         endpoint = f'peer/{network}' if network else 'peer'
         return self.send_request('get', endpoint)
+
+    #Not tested.
+    def create_network(self, config: dict):
+        return self.send_request('post', 'network', config)
+    
+    def get_network_details(self, network_id: str):
+        return self.send_request('get', f'network/{network_id}')
+
+    def delete_network(self, network_id: str):
+        return self.send_request('delete', f'network/{network_id}')
+    
+    def get_peer_details(self, peer_id: str):
+        return self.send_request('get', f'peer/{peer_id}')
