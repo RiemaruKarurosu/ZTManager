@@ -10,10 +10,7 @@
         "--socket=fallback-x11",
         "--device=dri",
         "--socket=wayland",
-        "--talk-name=org.freedesktop.Flatpak",
-        "--socket=system-bus",
-        "--talk-name=org.freedesktop.systemd1",
-        "--filesystem=xdg-config/ztlib"
+        "--system-talk-name=org.freedesktop.systemd1"
     ],
     "cleanup": [
         "/include",
@@ -37,8 +34,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/RiemaruKarurosu/ZT-Manager.git",
-                    "tag": "v2.0.2"
+                    "url": "https://github.com/RiemaruKarurosu/ZTManager.git",
+                    "tag": "2.0.2"
                 }
             ],
             "config-opts": [
