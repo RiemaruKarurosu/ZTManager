@@ -269,7 +269,7 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
                 start._switch = switch
 
                 start.add_suffix(switch)
-                button.connect("clicked", self.on_network_settings_clicked, network)
+                button.connect("clicked", self.on_network_settings_clicked, network["id"])
                 start.add_suffix(button)
 
                 self.action_rows.append(start)
@@ -280,9 +280,11 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
         self.ztlib.update_network(network_id, config)
         return False
 
-    def on_network_settings_clicked(self, button, network):
-        dialog = NetworkDetailsDialog(self, self.ztlib, network, self.on_row_action)
-        dialog.show()
+    def on_network_settings_clicked(self, button, network_id):
+        network = self.ztlib.get_network_details(network_id)
+        if network:
+            dialog = NetworkDetailsDialog(self, self.ztlib, network, self.on_row_action)
+            dialog.show()
 
 class PeersDialog(Gtk.Dialog):
     def __init__(self, parent, ztlib):
