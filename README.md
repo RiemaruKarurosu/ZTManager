@@ -1,6 +1,6 @@
 <h1 align="center"> ZeroTier-GTK </h1>
 <h3 align="center"> GTK4 + Libadwaita client for ZeroTier </h3>
-<p align="center"><img src="https://raw.githubusercontent.com/RiemaruKarurosu/ZeroTier-GTK/master/data/icons/hicolor/scalable/apps/io.github.riemarukarurosu.ZeroTierGTK.svg" width="100" height="100"></p> 
+<p align="center"><img src="data/icons/hicolor/scalable/apps/io.github.riemarukarurosu.ZeroTierGTK.svg" width="100" height="100"></p> 
 <div align="center">
      
   <a href="">[![Licence](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)</a>
@@ -28,9 +28,12 @@ flatpak-builder build-dir io.github.riemarukarurosu.ZeroTierGTK.json --user --in
 ```
 
 ## Screenshots
-<p align="center">
-  <img src="https://raw.githubusercontent.com/RiemaruKarurosu/ZeroTier-GTK/master/screenshots/main.png" width="600">
-</p>
+
+
+![Screenshot 1](https://i.imgur.com/ipBgTwA.png)
+![Screenshot 2](https://i.imgur.com/MRC9oKS.png)
+![Screenshot 3](https://i.imgur.com/Z1pqvhK.png)
+![Screenshot 4](https://i.imgur.com/tSo3VBH.png)
 
 ## License
 GPL-3.0-or-later
