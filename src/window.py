@@ -142,15 +142,13 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
             return True
         else:
             self.my_infobar.set_visible(True)
-            if self.ztlib.host_mode and not self.ztlib.is_installed():
-                self.my_label_infobar.set_label(_("ZeroTier-One is not installed on your system. Please install it to use this app in Host Mode."))
-                self.install_zerotier_button.set_visible(True)
-            elif not self.ztlib.host_mode and not self.ztlib.api_token:
-                self.my_label_infobar.set_label("No token provided. Please go to Preferences and enter a valid X-ZT1-Auth Token.")
-                self.install_zerotier_button.set_visible(False)
+            self.install_zerotier_button.set_visible(False)
+            if not self.ztlib.is_installed():
+                self.my_label_infobar.set_label(_("ZeroTier-One is not installed on your system. Please install it to use this app."))
+            elif not self.ztlib.api_token:
+                self.my_label_infobar.set_label(_("No token provided. Please go to Preferences and enter a valid X-ZT1-Auth Token."))
             else:
-                self.my_label_infobar.set_label("Warning: You need to start the zerotier service. Go to Preferences, otherwise this app will not work.")
-                self.install_zerotier_button.set_visible(False)
+                self.my_label_infobar.set_label(_("Warning: You need to start the zerotier service. Go to Preferences, otherwise this app will not work."))
             return False
 
     def on_show_peers_clicked(self, widget):
@@ -158,14 +156,7 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
         peers_dialog.present()
 
     def on_install_zerotier_clicked(self, button):
-        import subprocess
-        cmd = "flatpak-spawn --host pkexec sh -c 'curl -s https://install.zerotier.com | bash'"
-        try:
-            subprocess.run(cmd, shell=True)
-            self.on_check_lib()
-        except Exception as e:
-            print(f"Error installing zerotier: {e}")
-
+        pass
 
     def on_service_set(self, status):
         status = self.ztlib.service(status)
@@ -221,7 +212,9 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
             action_id = network["id"]
             existing_row = next((r for r in self.action_rows if r.get_name() == action_id), None)
 
-            if network["status"] == 'OK':
+            if not network.get('allowManaged', True):
+                status = 'network-offline-symbolic'
+            elif network["status"] == 'OK':
                 status = 'emblem-default'
             elif network["status"] in ('REQUESTING_CONFIGURATION', 'WAITING_FOR_NETWORK_DATA', 'JOINING'):
                 status = 'view-refresh'
@@ -234,7 +227,8 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
             if not name:
                 name = network.get("nwid", network.get("id", "Unknown"))
 
-            subtitle = f"NetID: { network['nwid'] } Ip: {network['assignedAddresses']} Status: { network['status'] } "
+            display_status = _("Disabled") if not network.get('allowManaged', True) else network['status']
+            subtitle = f"NetID: { network['nwid'] } Ip: {network['assignedAddresses']} Status: { display_status } "
 
             if existing_row:
                 try:
@@ -353,7 +347,8 @@ class NetworkDetailsDialog(Gtk.Dialog):
         self.add_info_row(group, "Name", network.get("name", "Unknown"))
         self.add_info_row(group, "MAC Address", network.get("mac", "Unknown"))
         self.add_info_row(group, "MTU", str(network.get("mtu", "Unknown")))
-        self.add_info_row(group, "Status", network.get("status", "Unknown"))
+        display_status = _("Disabled") if not network.get('allowManaged', True) else network.get("status", "Unknown")
+        self.add_info_row(group, "Status", display_status)
         
         ips = ", ".join(network.get("assignedAddresses", []))
         self.add_info_row(group, "IPs", ips if ips else "None")

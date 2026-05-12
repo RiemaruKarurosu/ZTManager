@@ -21,23 +21,12 @@ class PreferencesSettings:
         auth_group = Adw.PreferencesGroup()
         auth_group.set_title(_("Authentication"))
         
-        self.host_mode_row = Adw.ActionRow.new()
-        self.host_mode_row.set_title(_("Use Host Mode"))
-        self.host_mode_row.set_subtitle(_("Automatically fetch token from system (requires admin permissions)"))
-        self.host_mode_switch = Gtk.Switch()
-        self.host_mode_switch.set_active(self.zerotier.host_mode)
-        self.host_mode_switch.set_valign(Gtk.Align.CENTER)
-        self.host_mode_switch.connect("notify::active", self.on_host_mode_toggled)
-        self.host_mode_row.add_suffix(self.host_mode_switch)
-        auth_group.add(self.host_mode_row)
-        
         # Token Input
         self.token_row = Adw.PasswordEntryRow.new()
         self.token_row.set_title(_("Token X-ZT1-Auth"))
         if self.zerotier.api_token:
             self.token_row.set_text(self.zerotier.api_token)
         self.token_row.connect("changed", self.on_token_input_changed)
-        self.token_row.set_visible(not self.zerotier.host_mode)
         auth_group.add(self.token_row)
         
         page.add(auth_group)
@@ -45,12 +34,11 @@ class PreferencesSettings:
         # Zerotier Service
         service_group = Adw.PreferencesGroup()
         service_group.set_title(_("ZeroTier Service"))
-        print(zerotier_window.get_service_status())
         self.create_action_rows(service_group, _("Start ZeroTier"), _("The application needs this to work"), self.on_switch_state_start,
                                 zerotier_window.on_check_lib(), True)
         self.create_action_rows(service_group, _("Start on boot"),
-                                _("Start ZeroTier service on boot - NOT WORKING YET - use: sudo systemctl enable zerotier-one"),
-                                self.on_switch_state_enable, zerotier_window.get_service_status(), False)
+                                _("Start ZeroTier service automatically on system boot"),
+                                self.on_switch_state_enable, zerotier_window.get_service_status(), True)
         page.add(service_group)
 
         window.add(page)
@@ -70,12 +58,7 @@ class PreferencesSettings:
     def on_switch_state_enable(self, switch, state):
         active = switch.get_active()
         service_code = 3 if active else 4
-
-        self.window_zerotier.get_service_status()
-        print(self.window_zerotier.on_service_set(service_code))
-        self.window_zerotier.get_service_status()
-        print('encendido 1' if active else 'apagado 1')
-        return True
+        self.window_zerotier.on_service_set(service_code)
 
     def create_action_rows(self, group, title, subtitle, activation, status, active):
         start = Adw.ActionRow.new()
@@ -93,21 +76,6 @@ class PreferencesSettings:
 
         start.add_suffix(switch)
         group.add(start)
-
-    def on_host_mode_toggled(self, switch, gparam):
-        active = switch.get_active()
-        self.zerotier.host_mode = active
-        self.token_row.set_visible(not active)
-        if active:
-            token = self.zerotier.get_token()
-            if token:
-                self.token_row.set_text(token)
-            else:
-                self.zerotier.save_token()
-        else:
-            self.zerotier.save_token()
-            
-        self.window_zerotier.on_check_lib()
 
     def verify_token(self, token):
         return self.zerotier.check_token(token)

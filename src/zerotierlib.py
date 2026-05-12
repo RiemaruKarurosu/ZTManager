@@ -6,10 +6,10 @@ from pydbus import SystemBus
 from pathlib import Path
 import requests
 import urllib3
-import subprocess
 import os
 import json
 from typing import Optional
+from gi.repository import Gio, GLib
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -17,13 +17,12 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class ZeroTierNetwork:
     COMMANDS = ('start', 'stop', 'enable', 'disable')
     BASE_URL = 'http://localhost:9993/'
-    PATH = Path.home() / '.config' / 'ztlib'
+    PATH = Path(os.environ.get('XDG_CONFIG_HOME') or str(Path.home() / '.config' / 'ztmanager'))
     FILE = 'zt.conf'
     SERVICE = 'zerotier-one.service'
 
     def __init__(self, api_token: Optional[str] = None):
         self.api_token = api_token
-        self.host_mode = False
         self.serviceStatus = None
         self.headers = {'X-ZT1-Auth': f'{api_token}'} if api_token else None
         self.read_token()
@@ -32,33 +31,37 @@ class ZeroTierNetwork:
         try:
             if self.check_token(self.api_token):
                 return 'OK'
-            if self.read_token() in (401, 404) and self.check_token(self.get_token()):
-                return 'OK'
-            return 'MISSING ROOT PERMISSION'
+            return 'MISSING TOKEN'
         except Exception as e:
-            return f'MISSING ROOT PERMISSIONS EXCEPTION: {e}'
+            return f'ERROR: {e}'
 
     def zt_status(self) -> bool:
         try:
-            cmd = f"flatpak-spawn --host systemctl is-active {self.SERVICE}"
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-            return res.stdout.strip() == "active"
+            bus = SystemBus()
+            systemd = bus.get(".systemd1")
+            unit_path = systemd.LoadUnit(self.SERVICE)
+            unit = bus.get(".systemd1", unit_path)
+            return unit.ActiveState == "active"
         except Exception:
             return False
 
     def is_installed(self) -> bool:
         try:
-            cmd = "flatpak-spawn --host which zerotier-one"
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-            return res.returncode == 0
+            bus = SystemBus()
+            systemd = bus.get(".systemd1")
+            unit_path = systemd.LoadUnit(self.SERVICE)
+            unit = bus.get(".systemd1", unit_path)
+            return unit.LoadState != "not-found"
         except Exception:
             return False
 
     def zt_enable_status(self) -> bool:
         try:
-            cmd = f"flatpak-spawn --host systemctl is-enabled {self.SERVICE}"
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-            return res.stdout.strip() == "enabled"
+            bus = SystemBus()
+            systemd = bus.get(".systemd1")
+            unit_path = systemd.LoadUnit(self.SERVICE)
+            unit = bus.get(".systemd1", unit_path)
+            return unit.UnitFileState == "enabled"
         except Exception:
             return False
 
@@ -74,23 +77,31 @@ class ZeroTierNetwork:
                 return False
 
     def _zt_activate(self):
-        bus = SystemBus()
-        systemd = bus.get(".systemd1")
-        actions = {
-            self.COMMANDS[0]: lambda: systemd.StartUnit(self.SERVICE, "replace"),
-            self.COMMANDS[1]: lambda: systemd.StopUnit(self.SERVICE, "replace"),
-            self.COMMANDS[2]: lambda: (systemd.EnableUnitFiles([self.SERVICE], False, True), systemd.Reload()),
-            self.COMMANDS[3]: lambda: (systemd.DisableUnitFiles([self.SERVICE], False), systemd.Reload())
-        }
-        action = actions.get(self.serviceStatus)
-        if action:
-            action()
+        conn = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        flags = Gio.DBusCallFlags.ALLOW_INTERACTIVE_AUTHORIZATION
+        obj = "org.freedesktop.systemd1"
+        path = "/org/freedesktop/systemd1"
+        iface = "org.freedesktop.systemd1.Manager"
+
+        def call(method, params):
+            conn.call_sync(obj, path, iface, method, params, None, flags, -1, None)
+
+        if self.serviceStatus == self.COMMANDS[0]:
+            call("StartUnit", GLib.Variant("(ss)", (self.SERVICE, "replace")))
+        elif self.serviceStatus == self.COMMANDS[1]:
+            call("StopUnit", GLib.Variant("(ss)", (self.SERVICE, "replace")))
+        elif self.serviceStatus == self.COMMANDS[2]:
+            call("EnableUnitFiles", GLib.Variant("(asbb)", ([self.SERVICE], False, True)))
+            call("Reload", None)
+        elif self.serviceStatus == self.COMMANDS[3]:
+            call("DisableUnitFiles", GLib.Variant("(asb)", ([self.SERVICE], False)))
+            call("Reload", None)
+
         self.serviceStatus = None
 
     def save_token(self):
         config = {
-            'X-ZT1-Auth': self.api_token,
-            'host_mode': self.host_mode
+            'X-ZT1-Auth': self.api_token
         }
         configpath = self.PATH / self.FILE
         configpath.parent.mkdir(parents=True, exist_ok=True)
@@ -105,19 +116,13 @@ class ZeroTierNetwork:
             return 404
         with open(configpath, 'r') as configfile:
             config = json.load(configfile)
-        
-        self.host_mode = config.get('host_mode', False)
+
         api_token = config.get('X-ZT1-Auth')
-        
         if api_token and self.check_token(api_token):
             self.api_token = api_token
             self.headers = {'X-ZT1-Auth': f'{api_token}'}
             return 200
-            
-        if self.host_mode:
-            if self.get_token():
-                return 200
-                
+
         return 401
 
     def check_token(self, api_token: str) -> bool:
@@ -128,20 +133,6 @@ class ZeroTierNetwork:
         except requests.exceptions.RequestException as e:
             print(f"Error al verificar el token: {e}")
             return False
-
-    def get_token(self) -> Optional[str]:
-        try:
-            cmd = "flatpak-spawn --host pkexec cat /var/lib/zerotier-one/authtoken.secret"
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True, check=True)
-            clave_api = result.stdout.strip()
-            if self.check_token(clave_api):
-                self.api_token = clave_api
-                self.headers = {'X-ZT1-Auth': f'{self.api_token}'}
-                self.save_token()
-                return clave_api
-        except subprocess.CalledProcessError as e:
-            print(f"Error al obtener el token: {e}")
-            return None
 
     def send_request(self, method: str, endpoint: str, data: Optional[dict] = None):
         try:
