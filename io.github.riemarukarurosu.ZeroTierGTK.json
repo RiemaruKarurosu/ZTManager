@@ -1,5 +1,5 @@
 {
-    "app-id": "org.zerotier.ZerotierGTK",
+    "app-id": "io.github.riemarukarurosu.ZeroTierGTK",
     "runtime": "org.gnome.Platform",
     "runtime-version": "45",
     "sdk": "org.gnome.Sdk",

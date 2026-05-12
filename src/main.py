@@ -35,7 +35,7 @@ class ZerotierGtkApplication(Adw.Application):
 
     def __init__(self, version):
         self.version = version
-        super().__init__(application_id='org.zerotier.zerotiergtk',
+        super().__init__(application_id='io.github.riemarukarurosu.ZeroTierGTK',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
         self.create_action('quit', lambda *_: self.quit(), ['<primary>'])
         self.create_action('about', self.on_about_action)
@@ -53,7 +53,7 @@ class ZerotierGtkApplication(Adw.Application):
     def on_about_action(self, widget, _):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
                                 application_name='Zerotier-GTK',
-                                application_icon='org.zerotier.ZerotierGTK',
+                                                                application_icon='io.github.riemarukarurosu.ZeroTierGTK',
                                 developer_name='Riemaru Karurosu',
                                 version=f'{self.version}',
                                 developers=['Riemaru Karurosu'],

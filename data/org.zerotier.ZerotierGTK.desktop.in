@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=zerotiergtk
-Exec=zerotiergtk
-Icon=org.zerotier.ZerotierGTK
-Terminal=false
-Type=Application
-Categories=GTK;
-StartupNotify=true

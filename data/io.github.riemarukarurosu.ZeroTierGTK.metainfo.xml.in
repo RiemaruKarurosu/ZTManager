@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-id">
+  <id>io.github.riemarukarurosu.ZeroTierGTK</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>ZeroTier-GTK</name>
+  <summary>ZeroTier network management client for GNOME</summary>
+
+  <description>
+    <p>
+      ZeroTier-GTK is a modern GTK4/Libadwaita client for managing ZeroTier networks on Linux. 
+      It provides a clean and intuitive interface that integrates perfectly with the GNOME desktop environment.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Join and leave networks with a single click.</li>
+      <li>Automatic token detection in Host Mode.</li>
+      <li>Manual Mode for remote controller connectivity.</li>
+      <li>Detailed network information (IPs, MAC, Status).</li>
+      <li>Real-time peer/node visualization.</li>
+      <li>Auto-refreshing network status.</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">io.github.riemarukarurosu.ZeroTierGTK.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZeroTier-GTK/master/screenshots/main.png</image>
+      <caption>The main network list view.</caption>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://github.com/RiemaruKarurosu/ZeroTier-GTK</url>
+  <url type="bugtracker">https://github.com/RiemaruKarurosu/ZeroTier-GTK/issues</url>
+  <url type="vcs-browser">https://github.com/RiemaruKarurosu/ZeroTier-GTK</url>
+
+  <releases>
+    <release version="2.0.0-BETA" date="2024-05-12">
+      <description>
+        <p>Major modernization update:</p>
+        <ul>
+          <li>Migrated to GTK4 and Libadwaita.</li>
+          <li>Added auto-refreshing network status.</li>
+          <li>New network details and peers visualization.</li>
+          <li>Improved token security and persistence.</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1" />
+</component>

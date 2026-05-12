@@ -1,4 +1,4 @@
-application_id = 'org.zerotier.ZerotierGTK'
+application_id = 'io.github.riemarukarurosu.ZeroTierGTK'
 
 scalable_dir = 'hicolor' / 'scalable' / 'apps'
 install_data(

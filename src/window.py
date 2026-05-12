@@ -58,7 +58,7 @@ class NewNetwork(Gtk.Dialog):
         self.close()
 
 
-@Gtk.Template(resource_path='/org/zerotier/ZerotierGTK/window.ui')
+@Gtk.Template(resource_path='/io/github/riemarukarurosu/ZeroTierGTK/window.ui')
 class ZerotiergtkWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'ZerotiergtkWindow'
 

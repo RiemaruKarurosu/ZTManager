@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ZeroTier-GTK
+Comment=Manage your ZeroTier networks
+Exec=zerotiergtk
+Icon=io.github.riemarukarurosu.ZeroTierGTK
+Terminal=false
+Type=Application
+Categories=Network;GTK;GNOME;
+Keywords=zerotier;vpn;network;remote;
+StartupNotify=true
+StartupWMClass=io.github.riemarukarurosu.ZeroTierGTK

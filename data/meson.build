@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-        input: 'org.zerotier.ZerotierGTK.desktop.in',
-       output: 'org.zerotier.ZerotierGTK.desktop',
+        input: 'io.github.riemarukarurosu.ZeroTierGTK.desktop.in',
+       output: 'io.github.riemarukarurosu.ZeroTierGTK.desktop',
          type: 'desktop',
        po_dir: '../po',
       install: true,
@@ -13,8 +13,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: 'org.zerotier.ZerotierGTK.metainfo.xml.in',
-       output: 'org.zerotier.ZerotierGTK.metainfo.xml',
+        input: 'io.github.riemarukarurosu.ZeroTierGTK.metainfo.xml.in',
+       output: 'io.github.riemarukarurosu.ZeroTierGTK.metainfo.xml',
        po_dir: '../po',
       install: true,
   install_dir: get_option('datadir') / 'metainfo'
@@ -24,7 +24,7 @@ appstreamcli = find_program('appstreamcli', required: false, disabler: true)
 test('Validate appstream file', appstreamcli,
      args: ['validate', '--no-net', '--explain', appstream_file])
 
-install_data('org.zerotier.ZerotierGTK.gschema.xml',
+install_data('io.github.riemarukarurosu.ZeroTierGTK.gschema.xml',
   install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 

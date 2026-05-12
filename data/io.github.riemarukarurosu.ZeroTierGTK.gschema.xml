@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="zerotiergtk">
-	<schema id="org.zerotier.ZerotierGTK" path="/org/zerotier/ZerotierGTK/">
+	<schema id="io.github.riemarukarurosu.ZeroTierGTK" path="/io/github/riemarukarurosu/ZeroTierGTK/">
 	</schema>
 </schemalist>
