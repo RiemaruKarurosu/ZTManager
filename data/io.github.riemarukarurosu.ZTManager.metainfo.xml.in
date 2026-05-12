@@ -46,6 +46,17 @@
   <url type="vcs-browser">https://github.com/RiemaruKarurosu/ZT-Manager</url>
 
   <releases>
+    <release version="2.0.2" date="2026-05-12">
+      <description>
+        <p>First stable release under the ZT Manager name:</p>
+        <ul>
+          <li>Rebranded to ZT Manager for better compliance.</li>
+          <li>Fixed critical UI crashes in Peers window.</li>
+          <li>Updated to GNOME 50 and GTK4.</li>
+          <li>Full English and Spanish localization.</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0.1-Beta" date="2026-05-12">
       <description>
         <p>Technical polish and internationalization:</p>

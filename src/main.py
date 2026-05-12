@@ -67,7 +67,7 @@ class ZerotierGtkApplication(Adw.Application):
     def on_about_action(self, widget, unused):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
                                 application_name=_('ZT Manager'),
-                                application_icon='io.github.riemarukarurosu.ZeroTierGTK',
+                                application_icon='io.github.riemarukarurosu.ZTManager',
                                 developer_name='Riemaru Karurosu',
                                 version=f'{self.version}',
                                 developers=['Riemaru Karurosu'],
