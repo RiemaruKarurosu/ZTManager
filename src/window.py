@@ -298,12 +298,15 @@ class PeersDialog(Gtk.Dialog):
         scrolled.set_vexpand(True)
         scrolled.set_hexpand(True)
         
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        box.set_margin_top(10)
-        box.set_margin_bottom(10)
-        box.set_margin_start(10)
-        box.set_margin_end(10)
-        scrolled.set_child(box)
+        list_box = Gtk.ListBox()
+        list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        list_box.add_css_class("boxed-list")
+        list_box.set_margin_top(10)
+        list_box.set_margin_bottom(10)
+        list_box.set_margin_start(10)
+        list_box.set_margin_end(10)
+        
+        scrolled.set_child(list_box)
         content_area.append(scrolled)
         
         peers = ztlib.get_peers()
@@ -312,13 +315,14 @@ class PeersDialog(Gtk.Dialog):
                 row = Adw.ActionRow.new()
                 row.set_title(f"Peer: {peer.get('address', 'Unknown')}")
                 paths = peer.get('paths', [])
-                ip = paths[0].get('address') if paths else 'No IP'
+                ip = paths[0].get('address') if paths else _('No IP')
                 latency = peer.get('latency', -1)
-                row.set_subtitle(f"Role: {peer.get('role', 'Unknown')} | IP: {ip} | Latency: {latency}ms")
-                box.append(row)
+                row.set_subtitle(_("Role: {role} | IP: {ip} | Latency: {lat}ms").format(
+                    role=peer.get('role', 'Unknown'), ip=ip, lat=latency))
+                list_box.append(row)
         else:
-            lbl = Gtk.Label(label="No peers found.")
-            box.append(lbl)
+            lbl = Gtk.Label(label=_("No peers found."))
+            list_box.append(lbl)
 
 class NetworkDetailsDialog(Gtk.Dialog):
     def __init__(self, parent, ztlib, network, refresh_callback):
