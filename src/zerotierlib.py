@@ -5,24 +5,28 @@
 from pydbus import SystemBus
 from pathlib import Path
 import requests
+import urllib3
 import subprocess
 import os
 import json
 from typing import Optional
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 class ZeroTierNetwork:
     COMMANDS = ('start', 'stop', 'enable', 'disable')
-    BASE_URL = 'https://localhost:9993/'
+    BASE_URL = 'http://localhost:9993/'
     PATH = Path.home() / '.config' / 'ztlib'
     FILE = 'zt.conf'
     SERVICE = 'zerotier-one.service'
 
     def __init__(self, api_token: Optional[str] = None):
         self.api_token = api_token
+        self.host_mode = True
         self.serviceStatus = None
         self.headers = {'X-ZT1-Auth': f'{api_token}'} if api_token else None
-        print(self.zt_start())
+        self.read_token()
 
     def zt_start(self) -> str:
         try:
@@ -35,14 +39,30 @@ class ZeroTierNetwork:
             return f'MISSING ROOT PERMISSIONS EXCEPTION: {e}'
 
     def zt_status(self) -> bool:
-        unit = self.get_systemd_unit(self.SERVICE)
-        return unit and unit[3] == "active" and unit[4] == 'running'
+        try:
+            cmd = f"flatpak-spawn --host systemctl is-active {self.SERVICE}"
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            return res.stdout.strip() == "active"
+        except Exception:
+            return False
+
+    def is_installed(self) -> bool:
+        try:
+            cmd = "flatpak-spawn --host which zerotier-one"
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            return res.returncode == 0
+        except Exception:
+            return False
 
     def zt_enable_status(self) -> bool:
-        unit = self.get_systemd_unit(self.SERVICE)
-        return unit and unit[3] == 'enabled'
+        try:
+            cmd = f"flatpak-spawn --host systemctl is-enabled {self.SERVICE}"
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            return res.stdout.strip() == "enabled"
+        except Exception:
+            return False
 
-    def set_service_status(self, setstatus: int) -> bool:
+    def service(self, setstatus: int) -> bool:
         """Sets the status of the service to 'start', 'stop', 'enable', or 'disable'."""
         if setstatus:
             try:
@@ -68,7 +88,10 @@ class ZeroTierNetwork:
         self.serviceStatus = None
 
     def save_token(self):
-        config = {'X-ZT1-Auth': self.api_token}
+        config = {
+            'X-ZT1-Auth': self.api_token,
+            'host_mode': self.host_mode
+        }
         configpath = self.PATH / self.FILE
         configpath.parent.mkdir(parents=True, exist_ok=True)
         with open(configpath, 'w') as configfile:
@@ -82,17 +105,25 @@ class ZeroTierNetwork:
             return 404
         with open(configpath, 'r') as configfile:
             config = json.load(configfile)
+        
+        self.host_mode = config.get('host_mode', True)
         api_token = config.get('X-ZT1-Auth')
+        
         if api_token and self.check_token(api_token):
             self.api_token = api_token
             self.headers = {'X-ZT1-Auth': f'{api_token}'}
             return 200
+            
+        if self.host_mode:
+            if self.get_token():
+                return 200
+                
         return 401
 
     def check_token(self, api_token: str) -> bool:
         try:
             url = self.BASE_URL + 'status'
-            response = requests.get(url, headers={'X-ZT1-Auth': api_token})
+            response = requests.get(url, headers={'X-ZT1-Auth': api_token}, verify=False)
             return response.status_code == 200
         except requests.exceptions.RequestException as e:
             print(f"Error al verificar el token: {e}")
@@ -115,7 +146,7 @@ class ZeroTierNetwork:
     def send_request(self, method: str, endpoint: str, data: Optional[dict] = None):
         try:
             url = self.BASE_URL + endpoint
-            response = getattr(requests, method)(url, headers=self.headers, json=data)
+            response = getattr(requests, method)(url, headers=self.headers, json=data, verify=False)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -124,21 +155,22 @@ class ZeroTierNetwork:
 
     def get_networks(self, network: Optional[str] = None):
         endpoint = f'network/{network}' if network else 'network'
-        return self.send_request('get', endpoint)
+        result = self.send_request('get', endpoint)
+        return result if result is not None else []
 
     def join_networks(self, network: str):
         return self.send_request('post', f'network/{network}')
 
     def update_network(self, network: str, config: dict):
-        # Plan para la versión 2.0
-        pass
+        return self.send_request('post', f'network/{network}', config)
 
     def leave_networks(self, network: str):
         return self.send_request('delete', f'network/{network}')
 
     def get_peers(self, network: Optional[str] = None):
         endpoint = f'peer/{network}' if network else 'peer'
-        return self.send_request('get', endpoint)
+        result = self.send_request('get', endpoint)
+        return result if result is not None else []
 
     #Not tested.
     def create_network(self, config: dict):

@@ -33,7 +33,8 @@ class ZerotierGtkApplication(Adw.Application):
 
     ztlib = ZeroTierNetwork()
 
-    def __init__(self):
+    def __init__(self, version):
+        self.version = version
         super().__init__(application_id='org.zerotier.zerotiergtk',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
         self.create_action('quit', lambda *_: self.quit(), ['<primary>'])
@@ -53,8 +54,8 @@ class ZerotierGtkApplication(Adw.Application):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
                                 application_name='Zerotier-GTK',
                                 application_icon='org.zerotier.ZerotierGTK',
-                                developer_name='NOT FOR ACTUAL USE',
-                                version='1.4.4 - ALPHA',
+                                developer_name='Riemaru Karurosu',
+                                version=f'{self.version}',
                                 developers=['Riemaru Karurosu'],
                                 copyright='© 2024 Zerotier-GUI',
                                 issue_url='https://github.com/RiemaruKarurosu/ZeroTier-GTK/issues')
@@ -72,6 +73,6 @@ class ZerotierGtkApplication(Adw.Application):
 
 
 def main(version):
-    app = ZerotierGtkApplication()
+    app = ZerotierGtkApplication(version)
     return app.run(sys.argv)
 

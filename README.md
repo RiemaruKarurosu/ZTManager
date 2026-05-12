@@ -13,23 +13,21 @@
 [version-url]: https://github.com/RiemaruKarurosu/ZeroTier-GTK/releases
 [licence-url]: https://www.gnu.org/licenses/gpl-3.0
 
-ZeroTier-GTK is a GTK+ Libadwaita version of the ZeroTier GUI, specifically designed for GNOME users. Please note that this project is currently still in development and is not ready for use. It is a fork of the original ZeroTier-GUI project.
+ZeroTier-GTK is a GTK+ Libadwaita version of the ZeroTier GUI, specifically designed for GNOME users. It is a fork of the original ZeroTier-GUI project, modernized and improved for Flatpak environments.
 
-## State of the Project
-ZeroTier-GTK is still in active development, and its features are not fully implemented yet. Please be aware that it is not suitable for production use at this time.
-
-## Planned Features
-The following features are planned for inclusion in ZeroTier-GTK:
+## Features
+The following features are supported in ZeroTier-GTK:
 
 - [X] Detect if the zerotier-one service is running
 - [X] Provide the option to start the service
-- [ ] Provide the option to enable the service
+- [X] Install ZeroTier-One natively from within the app (Host Mode)
+- [X] Use custom API tokens for remote connectivity (Manual Mode)
 - [X] Show networks
 - [X] Add a new network
-- [ ] View detailed settings of a network
-- [ ] Disconnect from a network
-- [ ] Remove a network
-- [ ] Show peers
+- [X] View detailed settings of a network
+- [X] Disconnect from a network
+- [X] Remove a network
+- [X] Show peers
 
 ## Screenshots
 Please keep in mind that the screenshots provided are a work in progress, and the final version may differ.
@@ -39,8 +37,17 @@ Please keep in mind that the screenshots provided are a work in progress, and th
 ![Screenshot 3](https://i.imgur.com/Z1pqvhK.png)
 ![Screenshot 4](https://i.imgur.com/tSo3VBH.png)
 
+## Dependencies & Architecture
+**Important:** ZeroTier-GTK is designed to run as a Flatpak, but the ZeroTier service (`zerotier-one`) **must be installed on your host system**. Flatpaks cannot create the virtual network interfaces (TUN/TAP) required by ZeroTier due to sandbox limitations. 
+The app provides an automatic get-token via `pkexec` when "Host Mode" is enabled. If you prefer, you can also connect to a remote ZeroTier node by providing your token in "Manual Mode".
+
 ## Download and Installation
-ZeroTier-GTK is not available for download at the moment. Please refrain from attempting to download or install it until a stable release is announced.
+ZeroTier-GTK can be compiled from source using `meson` and `flatpak-builder` (or via GNOME Builder).
+
+To build the Flatpak via command line:
+```bash
+flatpak-builder build-dir org.zerotier.ZerotierGTK.json --user --install --force-clean
+```
 
 ## How to Contribute
 If you are interested in contributing to ZeroTier-GTK, please refer to the project's [contribution guidelines](https://github.com/RiemaruKarurosu/ZeroTier-GTK/wiki/How-to-contribute). Additionally, you can find documentation for the Zerotierlib used in this project [here](https://github.com/RiemaruKarurosu/ZeroTier-GTK/wiki/Zerotierlib-DOCS-v.1.4#zerotiernetwork/).

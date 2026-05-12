@@ -10,18 +10,36 @@ from zerotiergtk.zerotierlib import *
 
 class PreferencesSettings:
 
-    zerotier = ZeroTierNetwork()
-
     def __init__(self, zerotier_window, application):
         self.window_zerotier = zerotier_window
+        self.zerotier = zerotier_window.ztlib
         window = Adw.PreferencesWindow(application=application)
         page = Adw.PreferencesPage()
 
+        # Auth Mode
+        auth_group = Adw.PreferencesGroup()
+        auth_group.set_title("Autenticación")
+        
+        self.host_mode_row = Adw.ActionRow.new()
+        self.host_mode_row.set_title("Usar Modo Host")
+        self.host_mode_row.set_subtitle("Obtener token automáticamente del sistema (requiere permisos admin)")
+        self.host_mode_switch = Gtk.Switch()
+        self.host_mode_switch.set_active(self.zerotier.host_mode)
+        self.host_mode_switch.set_valign(Gtk.Align.CENTER)
+        self.host_mode_switch.connect("notify::active", self.on_host_mode_toggled)
+        self.host_mode_row.add_suffix(self.host_mode_switch)
+        auth_group.add(self.host_mode_row)
+        
         # Token Input
-        token_group = Adw.PreferencesGroup()
-        token_group.set_title("Token Input")
-        self.create_token_input_row(token_group, "X-ZT1-Auth Token", self.on_token_input_changed)
-        page.add(token_group)
+        self.token_row = Adw.PasswordEntryRow.new()
+        self.token_row.set_title("Token X-ZT1-Auth")
+        if self.zerotier.api_token:
+            self.token_row.set_text(self.zerotier.api_token)
+        self.token_row.connect("changed", self.on_token_input_changed)
+        self.token_row.set_visible(not self.zerotier.host_mode)
+        auth_group.add(self.token_row)
+        
+        page.add(auth_group)
 
         # Zerotier Service
         service_group = Adw.PreferencesGroup()
@@ -75,14 +93,20 @@ class PreferencesSettings:
         start.add_suffix(switch)
         group.add(start)
 
-    def create_token_input_row(self, group, title, change_callback):
-        token_row = Adw.EntryRow.new()
-        token_row.set_title(title)
-        if self.zerotier.api_token:
-            token_row.set_text(self.zerotier.api_token)
-        token_row.connect("changed", self.on_token_input_changed)
-
-        group.add(token_row)
+    def on_host_mode_toggled(self, switch, gparam):
+        active = switch.get_active()
+        self.zerotier.host_mode = active
+        self.token_row.set_visible(not active)
+        if active:
+            token = self.zerotier.get_token()
+            if token:
+                self.token_row.set_text(token)
+            else:
+                self.zerotier.save_token()
+        else:
+            self.zerotier.save_token()
+            
+        self.window_zerotier.on_check_lib()
 
     def verify_token(self, token):
         return self.zerotier.check_token(token)
@@ -92,19 +116,21 @@ class PreferencesSettings:
         if self.verify_token(token):
             print(f"Token verificado: {token}")
             self.zerotier.api_token = token
+            self.zerotier.headers = {'X-ZT1-Auth': f'{token}'}
             self.zerotier.save_token()
+            self.window_zerotier.on_check_lib()
         else:
             print("Token no válido. Por favor, introduce un token válido.")
 
     def show_info_dialog(self, button):
         dialog = Gtk.MessageDialog(
-            transient_for=None,
-            flags=0,
-            type=Gtk.MessageType.INFO,
+            transient_for=self.window_zerotier,
+            modal=True,
+            message_type=Gtk.MessageType.INFO,
             buttons=Gtk.ButtonsType.OK,
-            message_format="Información adicional aquí."
+            text="Información adicional aquí."
         )
-        dialog.run()
-        dialog.destroy()
+        dialog.connect("response", lambda d, r: d.destroy())
+        dialog.present()
 
 

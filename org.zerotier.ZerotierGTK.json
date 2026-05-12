@@ -1,23 +1,23 @@
 {
-    "app-id" : "org.zerotier.ZerotierGTK",
-    "runtime" : "org.gnome.Platform",
-    "runtime-version" : "45",
-    "sdk" : "org.gnome.Sdk",
-    "command" : "zerotiergtk",
-    "finish-args" : [
+    "app-id": "org.zerotier.ZerotierGTK",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "45",
+    "sdk": "org.gnome.Sdk",
+    "command": "zerotiergtk",
+    "finish-args": [
         "--share=network",
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
         "--socket=wayland",
         "--talk-name=org.freedesktop.DBus",
-    	"--talk-name=org.freedesktop.Flatpak",
-    	"--talk-name=org.freedesktop.DBus.Debug.Stats",
-    	"--socket=system-bus",
-    	"--socket=session-bus",
-    	"--filesystem=home"
+        "--talk-name=org.freedesktop.Flatpak",
+        "--talk-name=org.freedesktop.DBus.Debug.Stats",
+        "--socket=system-bus",
+        "--socket=session-bus",
+        "--filesystem=home"
     ],
-    "cleanup" : [
+    "cleanup": [
         "/include",
         "/lib/pkgconfig",
         "/man",
@@ -28,21 +28,27 @@
         "*.la",
         "*.a"
     ],
-    "modules" : [
+    "modules": [
         "python3-requests.json",
-    	"python3-psutil.json",
-    	"python3-pathlib2.json",
-    	"python3-pydbus.json",
+        "python3-psutil.json",
+        "python3-pathlib2.json",
+        "python3-pydbus.json",
         {
-            "name" : "zerotiergtk",
-            "builddir" : true,
-            "buildsystem" : "meson",
-            "sources" : [
+            "name": "zerotiergtk",
+            "builddir": true,
+            "buildsystem": "meson",
+            "sources": [
                 {
-                    "type" : "git",
-                    "url" : "file:///home/riemaru/Documentos/gnome"
+                    "type": "dir",
+                    "path": "."
                 }
+            ],
+            "config-opts": [
+                "--libdir=lib"
             ]
         }
-    ]
+    ],
+    "build-options": {
+        "env": {}
+    }
 }

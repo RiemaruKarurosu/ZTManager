@@ -18,17 +18,21 @@
               </object>
             </child>
             <child>
+              <object class="GtkButton" id="show_peers">
+                <property name="icon-name">network-workgroup</property>
+                <property name="focusable">true</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkButton" id="addnetwork">
                 <property name="icon-name">list-add</property>
                 <property name="focusable">true</property>
-                <signal name="clicked" handler="on_add_clicked"></signal>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="refresh">
                 <property name="icon-name">view-refresh</property>
                 <property name="focusable">true</property>
-                <signal name="clicked" handler="on_refresh_clicked"></signal>
               </object>
             </child>
           </object>
@@ -41,6 +45,15 @@
               <object class="GtkLabel" id="my_label_infobar">
                 <property name="visible">True</property>
                 <property name="label">Warning: You need to start zerotier service,you could start at Settings/ZeroTier One, otherwise, this app will not work.</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="install_zerotier_button">
+                <property name="visible">False</property>
+                <property name="label">Install ZeroTier</property>
+                <style>
+                  <class name="suggested-action"></class>
+                </style>
               </object>
             </child>
           </object>
