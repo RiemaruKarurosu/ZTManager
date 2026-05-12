@@ -23,7 +23,7 @@ class ZeroTierNetwork:
 
     def __init__(self, api_token: Optional[str] = None):
         self.api_token = api_token
-        self.host_mode = True
+        self.host_mode = False
         self.serviceStatus = None
         self.headers = {'X-ZT1-Auth': f'{api_token}'} if api_token else None
         self.read_token()
@@ -106,7 +106,7 @@ class ZeroTierNetwork:
         with open(configpath, 'r') as configfile:
             config = json.load(configfile)
         
-        self.host_mode = config.get('host_mode', True)
+        self.host_mode = config.get('host_mode', False)
         api_token = config.get('X-ZT1-Auth')
         
         if api_token and self.check_token(api_token):

@@ -17,7 +17,21 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import gettext
+import locale
+import os
 import sys
+
+DOMAIN = 'zerotiergtk'
+# Use the installation prefix for locales, usually /app/share/locale in Flatpak
+LOCALEDIR = os.path.join(os.path.dirname(__file__), '..', 'share', 'locale')
+if not os.path.exists(LOCALEDIR):
+    LOCALEDIR = '/app/share/locale'
+
+gettext.bindtextdomain(DOMAIN, LOCALEDIR)
+gettext.textdomain(DOMAIN)
+_ = gettext.gettext
+
 import gi
 from zerotiergtk.zerotierlib import *
 from zerotiergtk.preferences import *
@@ -50,18 +64,20 @@ class ZerotierGtkApplication(Adw.Application):
         self.zerotier_window.present()
 
 
-    def on_about_action(self, widget, _):
+    def on_about_action(self, widget, unused):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
-                                application_name='Zerotier-GTK',
-                                                                application_icon='io.github.riemarukarurosu.ZeroTierGTK',
+                                application_name=_('ZeroTier-GTK'),
+                                application_icon='io.github.riemarukarurosu.ZeroTierGTK',
                                 developer_name='Riemaru Karurosu',
                                 version=f'{self.version}',
                                 developers=['Riemaru Karurosu'],
-                                copyright='© 2024 Zerotier-GUI',
+                                copyright=_('© 2026 Riemaru Karurosu'),
+                                license_type=Gtk.License.GPL_3_0,
+                                website='https://github.com/RiemaruKarurosu/ZeroTier-GTK',
                                 issue_url='https://github.com/RiemaruKarurosu/ZeroTier-GTK/issues')
         about.present()
 
-    def on_preferences_action(self, widget, _):
+    def on_preferences_action(self, widget, unused):
         preferences = PreferencesSettings(self.zerotier_window, self)
 
     def create_action(self, name, callback, shortcuts=None):

@@ -21,10 +21,11 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GLib
 from zerotiergtk.zerotierlib import *
+from . import _
 
 class NewNetwork(Gtk.Dialog):
     def __init__(self, parent, on_add_network_callback=None):
-        super().__init__(title="Añadir Red", transient_for=parent)
+        super().__init__(title=_("Add Network"), transient_for=parent)
         self.set_default_size(300, 150)
         self.on_add_network_callback = on_add_network_callback
 
@@ -32,8 +33,8 @@ class NewNetwork(Gtk.Dialog):
         header_bar.set_show_title_buttons(True)
         self.set_titlebar(header_bar)
 
-        self.add_button("Cancelar", Gtk.ResponseType.CANCEL)
-        self.add_button("Aceptar", Gtk.ResponseType.OK)
+        self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        self.add_button(_("Add"), Gtk.ResponseType.OK)
 
         content_area = self.get_content_area()
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -43,7 +44,7 @@ class NewNetwork(Gtk.Dialog):
         box.set_margin_end(10)
         content_area.append(box)
 
-        self.network_id_entry = Gtk.Entry(placeholder_text="ID de Red")
+        self.network_id_entry = Gtk.Entry(placeholder_text=_("Network ID"))
         box.append(self.network_id_entry)
 
         self.connect("response", self.on_response)
@@ -97,7 +98,7 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
         networks = self.ztlib.get_networks()
 
         if not networks:
-            self._show_error_message("No se encontraron redes disponibles.")
+            self._show_error_message(_("No available networks found."))
             return
 
         for network in networks:
@@ -111,7 +112,7 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
 
         row = Adw.ActionRow.new()
         row.set_title(network["name"])
-        row.set_subtitle(f"NetID: {network['nwid']} Ip: {network['assignedAddresses']} Status: {network['status']}")
+        row.set_subtitle(_("NetID: {nwid} Ip: {addr} Status: {status}").format(nwid=network['nwid'], addr=network['assignedAddresses'], status=network['status']))
         row.set_icon_name(status_icon)
 
         switch = Gtk.Switch()
@@ -142,7 +143,7 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
         else:
             self.my_infobar.set_visible(True)
             if self.ztlib.host_mode and not self.ztlib.is_installed():
-                self.my_label_infobar.set_label("ZeroTier-One is not installed on your system. Please install it to use this app in Host Mode.")
+                self.my_label_infobar.set_label(_("ZeroTier-One is not installed on your system. Please install it to use this app in Host Mode."))
                 self.install_zerotier_button.set_visible(True)
             elif not self.ztlib.host_mode and not self.ztlib.api_token:
                 self.my_label_infobar.set_label("No token provided. Please go to Preferences and enter a valid X-ZT1-Auth Token.")
@@ -186,7 +187,7 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
             self.ztlib.join_networks(network_id)
             self.on_row_action()
         else:
-            self._show_error_message("ID de Red inválido.")
+            self._show_error_message(_("Invalid Network ID."))
 
 
     def get_service_status(self):
@@ -382,11 +383,11 @@ class NetworkDetailsDialog(Gtk.Dialog):
             modal=True,
             message_type=Gtk.MessageType.WARNING,
             buttons=Gtk.ButtonsType.NONE,
-            text="¿Estás seguro de que deseas eliminar esta red?"
+            text=_("Are you sure you want to delete this network?")
         )
-        dialog.set_property("secondary-text", "Esta acción hará que ZeroTier olvide la red por completo.")
-        dialog.add_button("Cancelar", Gtk.ResponseType.CANCEL)
-        confirm_btn = dialog.add_button("Eliminar", Gtk.ResponseType.OK)
+        dialog.set_property("secondary-text", _("This action will make ZeroTier forget the network completely."))
+        dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        confirm_btn = dialog.add_button(_("Delete"), Gtk.ResponseType.OK)
         confirm_btn.add_css_class("destructive-action")
         
         def on_response(d, response):

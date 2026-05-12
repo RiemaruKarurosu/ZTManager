@@ -6,6 +6,7 @@ gi.require_version('Adw', '1')
 from gi.repository import Adw
 from gi.repository import Gtk
 from zerotiergtk.zerotierlib import *
+from . import _
 
 
 class PreferencesSettings:
@@ -18,11 +19,11 @@ class PreferencesSettings:
 
         # Auth Mode
         auth_group = Adw.PreferencesGroup()
-        auth_group.set_title("Autenticación")
+        auth_group.set_title(_("Authentication"))
         
         self.host_mode_row = Adw.ActionRow.new()
-        self.host_mode_row.set_title("Usar Modo Host")
-        self.host_mode_row.set_subtitle("Obtener token automáticamente del sistema (requiere permisos admin)")
+        self.host_mode_row.set_title(_("Use Host Mode"))
+        self.host_mode_row.set_subtitle(_("Automatically fetch token from system (requires admin permissions)"))
         self.host_mode_switch = Gtk.Switch()
         self.host_mode_switch.set_active(self.zerotier.host_mode)
         self.host_mode_switch.set_valign(Gtk.Align.CENTER)
@@ -32,7 +33,7 @@ class PreferencesSettings:
         
         # Token Input
         self.token_row = Adw.PasswordEntryRow.new()
-        self.token_row.set_title("Token X-ZT1-Auth")
+        self.token_row.set_title(_("Token X-ZT1-Auth"))
         if self.zerotier.api_token:
             self.token_row.set_text(self.zerotier.api_token)
         self.token_row.connect("changed", self.on_token_input_changed)
@@ -43,12 +44,12 @@ class PreferencesSettings:
 
         # Zerotier Service
         service_group = Adw.PreferencesGroup()
-        service_group.set_title("Zerotier Service")
+        service_group.set_title(_("ZeroTier Service"))
         print(zerotier_window.get_service_status())
-        self.create_action_rows(service_group, "Zerotier start", "The app needs this to work", self.on_switch_state_start,
+        self.create_action_rows(service_group, _("Start ZeroTier"), _("The application needs this to work"), self.on_switch_state_start,
                                 zerotier_window.on_check_lib(), True)
-        self.create_action_rows(service_group, "Zerotier start on boot",
-                                "Start zerotier service on boot -NOT WORKING- go to terminal and type: sudo systemctl enable zerotier-one",
+        self.create_action_rows(service_group, _("Start on boot"),
+                                _("Start ZeroTier service on boot - NOT WORKING YET - use: sudo systemctl enable zerotier-one"),
                                 self.on_switch_state_enable, zerotier_window.get_service_status(), False)
         page.add(service_group)
 

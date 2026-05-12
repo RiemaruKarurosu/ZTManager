@@ -44,13 +44,13 @@
             <child>
               <object class="GtkLabel" id="my_label_infobar">
                 <property name="visible">True</property>
-                <property name="label">Warning: You need to start zerotier service,you could start at Settings/ZeroTier One, otherwise, this app will not work.</property>
+                <property name="label" translatable="yes">Warning: You need to start zerotier service,you could start at Settings/ZeroTier One, otherwise, this app will not work.</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="install_zerotier_button">
                 <property name="visible">False</property>
-                <property name="label">Install ZeroTier</property>
+                <property name="label" translatable="yes">Install ZeroTier</property>
                 <style>
                   <class name="suggested-action"></class>
                 </style>
@@ -64,7 +64,7 @@
             <property name="vexpand">TRUE</property>
             <child>
               <object class="AdwPreferencesGroup" id="action_row">
-                <property name="title">Networks: </property>
+                <property name="title" translatable="yes">Networks: </property>
                 <property name="margin-bottom">15</property>
                 <property name="margin-end">35</property>
                 <property name="margin-start">35</property>
@@ -90,7 +90,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About Zerotier-gtk</attribute>
+        <attribute name="label" translatable="yes">_About ZeroTier-GTK</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>

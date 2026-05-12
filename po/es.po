@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ZeroTier-GTK\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-12 10:00+0000\n"
+"PO-Revision-Date: 2024-05-12 10:00+0000\n"
+"Last-Translator: Riemaru Karurosu\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.py:54
+msgid "ZeroTier-GTK"
+msgstr "ZeroTier-GTK"
+
+#: src/main.py:59
+msgid "© 2024 Riemaru Karurosu"
+msgstr "© 2024 Riemaru Karurosu"
+
+#: src/window.py:24
+msgid "Add Network"
+msgstr "Añadir Red"
+
+#: src/window.py:32
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/window.py:33
+msgid "Add"
+msgstr "Aceptar"
+
+#: src/window.py:43
+msgid "Network ID"
+msgstr "ID de Red"
+
+#: src/window.py:98
+msgid "No available networks found."
+msgstr "No se encontraron redes disponibles."
+
+#: src/window.py:111
+msgid "NetID: {nwid} Ip: {addr} Status: {status}"
+msgstr "ID Red: {nwid} Ip: {addr} Estado: {status}"
+
+#: src/window.py:141
+msgid "ZeroTier-One is not installed on your system. Please install it to use this app in Host Mode."
+msgstr "ZeroTier-One no está instalado en tu sistema. Por favor, instálalo para usar esta app en Modo Host."
+
+#: src/window.py:187
+msgid "Invalid Network ID."
+msgstr "ID de Red inválido."
+
+#: src/window.py:342
+msgid "Enter a 16-character Network ID."
+msgstr "Ingresa un ID de red de 16 caracteres."
+
+#: src/window.py:377
+msgid "Are you sure you want to delete this network?"
+msgstr "¿Estás seguro de que deseas eliminar esta red?"
+
+#: src/window.py:379
+msgid "This action will make ZeroTier forget the network completely."
+msgstr "Esta acción hará que ZeroTier olvide la red por completo."
+
+#: src/window.py:381
+msgid "Delete"
+msgstr "Eliminar"
+
+#: src/preferences.py:21
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: src/preferences.py:24
+msgid "Use Host Mode"
+msgstr "Usar Modo Host"
+
+#: src/preferences.py:25
+msgid "Automatically fetch token from system (requires admin permissions)"
+msgstr "Obtener token automáticamente del sistema (requiere permisos admin)"
+
+#: src/preferences.py:36
+msgid "Token X-ZT1-Auth"
+msgstr "Token X-ZT1-Auth"
+
+#: src/preferences.py:46
+msgid "ZeroTier Service"
+msgstr "Servicio ZeroTier"
+
+#: src/preferences.py:48
+msgid "Start ZeroTier"
+msgstr "Iniciar ZeroTier"
+
+#: src/preferences.py:48
+msgid "The application needs this to work"
+msgstr "La aplicación necesita esto para funcionar"
+
+#: src/preferences.py:50
+msgid "Start on boot"
+msgstr "Iniciar al arrancar"
+
+#: src/preferences.py:51
+msgid "Start ZeroTier service on boot - NOT WORKING YET - use: sudo systemctl enable zerotier-one"
+msgstr "Iniciar el servicio ZeroTier al arrancar - NO FUNCIONA AÚN - usa: sudo systemctl enable zerotier-one"
+
+#: src/window.ui:47
+msgid "Warning: You need to start zerotier service,you could start at Settings/ZeroTier One, otherwise, this app will not work."
+msgstr "Advertencia: Necesitas iniciar el servicio ZeroTier en Ajustes, de lo contrario esta app no funcionará."
+
+#: src/window.ui:53
+msgid "Install ZeroTier"
+msgstr "Instalar ZeroTier"
+
+#: src/window.ui:67
+msgid "Networks: "
+msgstr "Redes: "
+
+#: src/window.ui:85
+msgid "_Preferences"
+msgstr "_Preferencias"
+
+#: src/window.ui:89
+msgid "_Keyboard Shortcuts"
+msgstr "_Atajos de Teclado"
+
+#: src/window.ui:93
+msgid "_About ZeroTier-GTK"
+msgstr "_Acerca de ZeroTier-GTK"
