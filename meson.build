@@ -1,4 +1,4 @@
-project('zerotiergtk',
+project('zt-manager',
           version: '2.0.1-Beta',
     meson_version: '>= 0.62.0',
   default_options: [ 'warning_level=2', 'werror=false', ],
@@ -20,5 +20,5 @@ gnome.post_install(
 )
 
 install_data('COPYING',
-  install_dir: get_option('datadir') / 'licenses' / 'io.github.riemarukarurosu.ZeroTierGTK'
+  install_dir: get_option('datadir') / 'licenses' / 'io.github.riemarukarurosu.ZTManager'
 )

@@ -1,9 +1,9 @@
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
-moduledir = pkgdatadir / 'zerotiergtk'
+moduledir = pkgdatadir / 'ztmanager'
 gnome = import('gnome')
 
-gnome.compile_resources('zerotiergtk',
-  'zerotiergtk.gresource.xml',
+gnome.compile_resources('ztmanager',
+  'ztmanager.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
@@ -18,15 +18,15 @@ conf.set('localedir', get_option('prefix') / get_option('localedir'))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
-  input: 'zerotiergtk.in',
-  output: 'zerotiergtk',
+  input: 'ztmanager.in',
+  output: 'ztmanager',
   configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
   install_mode: 'r-xr--r--'
 )
 
-zerotiergtk_sources = [
+ztmanager_sources = [
   '__init__.py',
   'main.py',
   'window.py',
@@ -34,4 +34,4 @@ zerotiergtk_sources = [
   'preferences.py',
 ]
 
-install_data(zerotiergtk_sources, install_dir: moduledir)
+install_data(ztmanager_sources, install_dir: moduledir)

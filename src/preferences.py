@@ -5,7 +5,7 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Adw
 from gi.repository import Gtk
-from zerotiergtk.zerotierlib import *
+from ztmanager.zerotierlib import *
 from . import _
 
 

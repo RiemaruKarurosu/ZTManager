@@ -20,7 +20,7 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GLib
-from zerotiergtk.zerotierlib import *
+from ztmanager.zerotierlib import *
 from . import _
 
 class NewNetwork(Gtk.Dialog):
@@ -59,7 +59,7 @@ class NewNetwork(Gtk.Dialog):
         self.close()
 
 
-@Gtk.Template(resource_path='/io/github/riemarukarurosu/ZeroTierGTK/window.ui')
+@Gtk.Template(resource_path='/io/github/riemarukarurosu/ZTManager/window.ui')
 class ZerotiergtkWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'ZerotiergtkWindow'
 

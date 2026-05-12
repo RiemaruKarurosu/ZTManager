@@ -1,7 +1,7 @@
-data/io.github.riemarukarurosu.ZeroTierGTK.desktop.in
-data/io.github.riemarukarurosu.ZeroTierGTK.metainfo.xml.in
-data/io.github.riemarukarurosu.ZeroTierGTK.gschema.xml
+data/io.github.riemarukarurosu.ZTManager.desktop.in
+data/io.github.riemarukarurosu.ZTManager.metainfo.xml.in
+data/io.github.riemarukarurosu.ZTManager.gschema.xml
 src/main.py
 src/window.py
-src/window.ui
 src/preferences.py
+src/window.ui

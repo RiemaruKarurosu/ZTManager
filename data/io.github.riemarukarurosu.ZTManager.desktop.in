@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=ZeroTier-GTK
+Name=ZT Manager
 Comment=Manage your ZeroTier networks
-Exec=zerotiergtk
-Icon=io.github.riemarukarurosu.ZeroTierGTK
+Exec=ztmanager
+Icon=io.github.riemarukarurosu.ZTManager
 Terminal=false
 Type=Application
 Categories=Network;GTK;GNOME;
 Keywords=zerotier;vpn;network;remote;
 StartupNotify=true
-StartupWMClass=io.github.riemarukarurosu.ZeroTierGTK
+StartupWMClass=io.github.riemarukarurosu.ZTManager

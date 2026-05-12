@@ -1,9 +1,9 @@
 {
-    "app-id": "io.github.riemarukarurosu.ZeroTierGTK",
+    "app-id": "io.github.riemarukarurosu.ZTManager",
     "runtime": "org.gnome.Platform",
     "runtime-version": "50",
     "sdk": "org.gnome.Sdk",
-    "command": "zerotiergtk",
+    "command": "ztmanager",
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -31,7 +31,7 @@
         "python3-psutil.json",
         "python3-pydbus.json",
         {
-            "name": "zerotiergtk",
+            "name": "ztmanager",
             "builddir": true,
             "buildsystem": "meson",
             "sources": [

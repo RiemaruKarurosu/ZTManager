@@ -2,7 +2,7 @@ import gettext
 import os
 import locale
 
-DOMAIN = 'zerotiergtk'
+DOMAIN = 'ztmanager'
 LOCALEDIR = '/app/share/locale'
 if not os.path.exists(LOCALEDIR):
     LOCALEDIR = os.path.join(os.path.dirname(__file__), '..', '..', 'share', 'locale')

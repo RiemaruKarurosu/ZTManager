@@ -1,1 +1,1 @@
-i18n.gettext('zerotiergtk', preset: 'glib')
+i18n.gettext('ztmanager', preset: 'glib')

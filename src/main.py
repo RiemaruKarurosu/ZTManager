@@ -22,7 +22,7 @@ import locale
 import os
 import sys
 
-DOMAIN = 'zerotiergtk'
+DOMAIN = 'ztmanager'
 # Use the installation prefix for locales, usually /app/share/locale in Flatpak
 LOCALEDIR = os.path.join(os.path.dirname(__file__), '..', 'share', 'locale')
 if not os.path.exists(LOCALEDIR):
@@ -33,8 +33,8 @@ gettext.textdomain(DOMAIN)
 _ = gettext.gettext
 
 import gi
-from zerotiergtk.zerotierlib import *
-from zerotiergtk.preferences import *
+from ztmanager.zerotierlib import *
+from ztmanager.preferences import *
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -49,7 +49,7 @@ class ZerotierGtkApplication(Adw.Application):
 
     def __init__(self, version):
         self.version = version
-        super().__init__(application_id='io.github.riemarukarurosu.ZeroTierGTK',
+        super().__init__(application_id='io.github.riemarukarurosu.ZTManager',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
         self.create_action('quit', lambda *_: self.quit(), ['<primary>'])
         self.create_action('about', self.on_about_action)
@@ -66,15 +66,15 @@ class ZerotierGtkApplication(Adw.Application):
 
     def on_about_action(self, widget, unused):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
-                                application_name=_('ZeroTier-GTK'),
+                                application_name=_('ZT Manager'),
                                 application_icon='io.github.riemarukarurosu.ZeroTierGTK',
                                 developer_name='Riemaru Karurosu',
                                 version=f'{self.version}',
                                 developers=['Riemaru Karurosu'],
                                 copyright=_('© 2026 Riemaru Karurosu'),
                                 license_type=Gtk.License.GPL_3_0,
-                                website='https://github.com/RiemaruKarurosu/ZeroTier-GTK',
-                                issue_url='https://github.com/RiemaruKarurosu/ZeroTier-GTK/issues')
+                                website='https://github.com/RiemaruKarurosu/ZT-Manager',
+                                issue_url='https://github.com/RiemaruKarurosu/ZT-Manager/issues')
         about.present()
 
     def on_preferences_action(self, widget, unused):

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.riemarukarurosu.ZeroTierGTK</id>
+  <id>io.github.riemarukarurosu.ZTManager</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <name>ZeroTier-GTK</name>
+  <name>ZT Manager</name>
   <summary>ZeroTier network management client for GNOME</summary>
 
   <description>
+    <p>
+      <b>This is a community package of ZeroTier-GTK and not officially supported by ZeroTier, Inc.</b>
+    </p>
+    <p>
+      <b>Note: This application requires the 'zerotier-one' service to be installed and running on your host system.</b>
+    </p>
     <p>
       ZeroTier-GTK is a modern GTK4/Libadwaita client for managing ZeroTier networks on Linux. 
       It provides a clean and intuitive interface that integrates perfectly with the GNOME desktop environment.
@@ -26,18 +32,18 @@
     <name>Riemaru Karurosu</name>
   </developer>
 
-  <launchable type="desktop-id">io.github.riemarukarurosu.ZeroTierGTK.desktop</launchable>
+  <launchable type="desktop-id">io.github.riemarukarurosu.ZTManager.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZeroTier-GTK/master/screenshots/main.png</image>
+      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZT-Manager/master/screenshots/main.png</image>
       <caption>The main network list view.</caption>
     </screenshot>
   </screenshots>
 
-  <url type="homepage">https://github.com/RiemaruKarurosu/ZeroTier-GTK</url>
-  <url type="bugtracker">https://github.com/RiemaruKarurosu/ZeroTier-GTK/issues</url>
-  <url type="vcs-browser">https://github.com/RiemaruKarurosu/ZeroTier-GTK</url>
+  <url type="homepage">https://github.com/RiemaruKarurosu/ZT-Manager</url>
+  <url type="bugtracker">https://github.com/RiemaruKarurosu/ZT-Manager/issues</url>
+  <url type="vcs-browser">https://github.com/RiemaruKarurosu/ZT-Manager</url>
 
   <releases>
     <release version="2.0.1-Beta" date="2026-05-12">
