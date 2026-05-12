@@ -18,3 +18,7 @@ gnome.post_install(
     gtk_update_icon_cache: true,
   update_desktop_database: true,
 )
+
+install_data('COPYING',
+  install_dir: get_option('datadir') / 'licenses' / 'io.github.riemarukarurosu.ZeroTierGTK'
+)

@@ -42,9 +42,6 @@
             ],
             "config-opts": [
                 "--libdir=lib"
-            ],
-            "post-install": [
-                "install -Dm644 ../LICENSE -t /app/share/licenses/io.github.riemarukarurosu.ZeroTierGTK/zerotiergtk"
             ]
         }
     ],
