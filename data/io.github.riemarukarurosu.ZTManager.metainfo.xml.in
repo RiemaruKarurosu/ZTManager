@@ -8,13 +8,13 @@
 
   <description>
     <p>
-      <b>This is a community package of ZeroTier-GTK and not officially supported by ZeroTier, Inc.</b>
+      <em>This is a community package of ZT Manager and not officially supported by ZeroTier, Inc.</em>
     </p>
     <p>
-      <b>Note: This application requires the 'zerotier-one' service to be installed and running on your host system.</b>
+      <em>Note: This application requires the 'zerotier-one' service to be installed and running on your host system.</em>
     </p>
     <p>
-      ZeroTier-GTK is a modern GTK4/Libadwaita client for managing ZeroTier networks on Linux. 
+      ZT Manager is a modern GTK4/Libadwaita client for managing ZeroTier networks on Linux. 
       It provides a clean and intuitive interface that integrates perfectly with the GNOME desktop environment.
     </p>
     <p>Features:</p>
@@ -36,7 +36,7 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZT-Manager/master/screenshots/main.png</image>
+      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZT-Manager/main/screenshots/main.png</image>
       <caption>The main network list view.</caption>
     </screenshot>
   </screenshots>
@@ -51,7 +51,7 @@
         <p>First stable release under the ZT Manager name:</p>
         <ul>
           <li>Rebranded to ZT Manager for better compliance.</li>
-          <li>Fixed critical UI crashes in Peers window.</li>
+          <li>Fixed UI crashes in Peers window.</li>
           <li>Updated to GNOME 50 and GTK4.</li>
           <li>Full English and Spanish localization.</li>
         </ul>

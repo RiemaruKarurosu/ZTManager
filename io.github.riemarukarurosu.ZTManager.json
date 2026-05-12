@@ -13,7 +13,7 @@
         "--talk-name=org.freedesktop.Flatpak",
         "--socket=system-bus",
         "--talk-name=org.freedesktop.systemd1",
-        "--filesystem=xdg-config/ztlib:create"
+        "--filesystem=xdg-config/ztlib"
     ],
     "cleanup": [
         "/include",
@@ -36,8 +36,9 @@
             "buildsystem": "meson",
             "sources": [
                 {
-                    "type": "dir",
-                    "path": "."
+                    "type": "git",
+                    "url": "https://github.com/RiemaruKarurosu/ZT-Manager.git",
+                    "tag": "v2.0.2"
                 }
             ],
             "config-opts": [

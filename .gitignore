@@ -1,2 +1,12 @@
 *.deb
 *.rpm
+.flatpak-builder/
+build-dir/
+repo/
+__pycache__/
+*.pyc
+*.pyo
+build/
+subprojects/
+.flatpak-builder/*
+.flatpak-builder
