@@ -26,7 +26,7 @@ If you desire to try a solution for managing ZeroTier networks, you can consider
 
 ## Installation
 
-We provide a Flatpak package for easy installation [here](https://github.com/RiemaruKarurosu/ZTManager/releases). Additionally, you can find the rpm package for installation on Fedora [here](https://github.com/RiemaruKarurosu/ZeroTier-GTK/releases). Or you can use the appimage [here](https://github.com/RiemaruKarurosu/ZTManager/releases).
+We provide a Flatpak package for easy installation [here](https://github.com/RiemaruKarurosu/ZTManager/releases). Additionally, you can find the rpm package for installation on Fedora [here](https://github.com/RiemaruKarurosu/ZTManager/releases). Or you can use the appimage [here](https://github.com/RiemaruKarurosu/ZTManager/releases).
 
 ## Screenshots
 
@@ -49,4 +49,4 @@ The i18n is currently in progress and will be updated as new languages are added
 
 ## How to Contribute
 
-If you are interested in contributing to ZeroTier-GTK, please refer to the project's [contribution guidelines](https://github.com/RiemaruKarurosu/ZeroTier-GTK/wiki/How-to-contribute). Additionally, you can find documentation for the Zerotierlib used in this project [here](https://github.com/RiemaruKarurosu/ZeroTier-GTK/wiki/Zerotierlib-DOCS-v.1.4#zerotiernetwork/).
+If you are interested in contributing to ZTManager, please refer to the project's [contribution guidelines](https://github.com/RiemaruKarurosu/ZTManager/wiki/How-to-contribute). Additionally, you can find documentation for the Zerotierlib used in this project [here](https://github.com/RiemaruKarurosu/ZTManager/wiki/Zerotierlib-DOCS-v.1.4#zerotiernetwork/).
