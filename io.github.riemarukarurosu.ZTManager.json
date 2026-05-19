@@ -35,7 +35,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/RiemaruKarurosu/ZTManager.git",
-                    "tag": "2.0.2"
+                    "tag": "RELEASE_TAG"
                 }
             ],
             "config-opts": [

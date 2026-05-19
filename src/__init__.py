@@ -3,9 +3,9 @@ import os
 import locale
 
 DOMAIN = 'ztmanager'
-LOCALEDIR = '/app/share/locale'
+LOCALEDIR = os.path.join(os.path.dirname(__file__), '..', '..', 'share', 'locale')
 if not os.path.exists(LOCALEDIR):
-    LOCALEDIR = os.path.join(os.path.dirname(__file__), '..', '..', 'share', 'locale')
+    LOCALEDIR = '/usr/share/locale'
 
 try:
     locale.setlocale(locale.LC_ALL, '')

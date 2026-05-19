@@ -1,0 +1,269 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 2.0.3)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        default: false
+        type: boolean
+      submit_copr:
+        description: 'Submit to Fedora COPR'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    name: Create tag
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create and push tag
+        id: tag
+        run: |
+          VERSION="${{ inputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f "v${VERSION}"
+          git push origin -f "v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+  appimage:
+    name: Build AppImage
+    needs: tag
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.tag.outputs.version }}
+
+      - name: Set version from tag
+        run: |
+          sed -i "s/^\([[:space:]]*\)version: '[^']*'/\1version: '${{ needs.tag.outputs.version }}'/" meson.build
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            meson ninja-build python3 python3-pip gettext libglib2.0-bin \
+            libgtk-4-dev libadwaita-1-dev \
+            python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 \
+            appstream desktop-file-utils wget
+
+      - name: Build and install into AppDir
+        run: |
+          meson setup builddir --prefix=/usr
+          ninja -C builddir
+          DESTDIR="$(pwd)/AppDir" ninja -C builddir install
+
+      - name: Bundle Python vendor deps
+        run: |
+          VENDOR="AppDir/usr/share/zt-manager/vendor"
+          mkdir -p "$VENDOR"
+          /usr/bin/python3 -m pip install --target="$VENDOR" --no-deps pydbus requests
+          /usr/bin/python3 -m pip install --target="$VENDOR" --only-binary=:all: psutil
+          find "$VENDOR" -maxdepth 1 -name "*.dist-info" -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Create AppRun
+        run: |
+          cat > AppDir/AppRun << 'APPRUN'
+          #!/bin/bash
+          APPDIR="$(dirname "$(readlink -f "$0")")"
+          export APPDIR
+          export PYTHONPATH="${APPDIR}/usr/share/zt-manager/vendor:${PYTHONPATH}"
+          exec /usr/bin/python3 "${APPDIR}/usr/bin/ztmanager" "$@"
+          APPRUN
+          chmod +x AppDir/AppRun
+
+      - name: Prepare AppDir metadata
+        run: |
+          DESKTOP=$(find AppDir/usr/share/applications -name "*.desktop" | head -1)
+          [ -n "$DESKTOP" ] && cp "$DESKTOP" AppDir/ || true
+          SVG=$(find AppDir/usr/share/icons -name "io.github.riemarukarurosu.ZTManager.svg" | head -1)
+          [ -n "$SVG" ] && cp "$SVG" AppDir/io.github.riemarukarurosu.ZTManager.svg || true
+          PNG=$(find AppDir/usr/share/icons -name "*.png" | grep apps | head -1)
+          [ -n "$PNG" ] && cp "$PNG" AppDir/io.github.riemarukarurosu.ZTManager.png || true
+
+      - name: Build AppImage
+        run: |
+          VERSION="${{ needs.tag.outputs.version }}"
+          wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
+          ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN=1 ./appimagetool-x86_64.AppImage AppDir \
+            "ZTManager-${VERSION}-appimage-x86_64.AppImage"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: appimage
+          path: ZTManager-*-appimage-x86_64.AppImage
+
+  rpm:
+    name: Build RPM
+    needs: tag
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:42
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.tag.outputs.version }}
+
+      - name: Set version from tag
+        run: |
+          sed -i "s/^\([[:space:]]*\)version: '[^']*'/\1version: '${{ needs.tag.outputs.version }}'/" meson.build
+
+      - name: Install build dependencies
+        run: |
+          dnf install -y \
+            rpm-build meson ninja-build gettext \
+            python3 python3-devel python3-gobject \
+            python3-requests python3-pydbus python3-psutil \
+            gtk4-devel libadwaita-devel glib2-devel \
+            desktop-file-utils libappstream-glib
+
+      - name: Create source tarball
+        run: |
+          VERSION="${{ needs.tag.outputs.version }}"
+          RPMBUILD="${HOME}/rpmbuild"
+          mkdir -p "${RPMBUILD}"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          tar --exclude='.git' --exclude='.venv' --exclude='dist' \
+              --exclude='__pycache__' --exclude='*.pyc' --exclude='*.pyo' \
+              -czf "${RPMBUILD}/SOURCES/v${VERSION}.tar.gz" \
+              --transform "s|^\.|ZT-Manager-${VERSION}|" .
+          cp packaging/ztmanager.spec "${RPMBUILD}/SPECS/ztmanager.spec"
+
+      - name: Build RPM and SRPM
+        run: |
+          VERSION="${{ needs.tag.outputs.version }}"
+          RPMBUILD="${HOME}/rpmbuild"
+          DATE=$(date '+%a %b %d %Y')
+          echo "* ${DATE} github-actions[bot] <noreply@github.com> - ${VERSION}-1" >> "${RPMBUILD}/SPECS/ztmanager.spec"
+          echo "- Release ${VERSION}" >> "${RPMBUILD}/SPECS/ztmanager.spec"
+          rpmbuild -ba "${RPMBUILD}/SPECS/ztmanager.spec" \
+            --define "app_version ${VERSION}" \
+            --define "_topdir ${RPMBUILD}"
+
+      - name: Collect artifacts
+        run: |
+          VERSION="${{ needs.tag.outputs.version }}"
+          RPMBUILD="${HOME}/rpmbuild"
+          mkdir -p dist
+          find "${RPMBUILD}/RPMS" -name "*.rpm" | while read -r f; do
+            base=$(basename "$f")
+            newbase=$(echo "$base" | sed "s/-${VERSION}-/-${VERSION}-rpm-/")
+            cp "$f" "dist/$newbase"
+          done
+          find "${RPMBUILD}/SRPMS" -name "*.src.rpm" -exec cp {} dist/ \;
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm
+          path: dist/
+
+  flatpak:
+    name: Build Flatpak
+    needs: tag
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.tag.outputs.version }}
+
+      - name: Set version from tag
+        run: |
+          sed -i "s/^\([[:space:]]*\)version: '[^']*'/\1version: '${{ needs.tag.outputs.version }}'/" meson.build
+          sed -i "s/\"tag\": \"RELEASE_TAG\"/\"tag\": \"v${{ needs.tag.outputs.version }}\"/" io.github.riemarukarurosu.ZTManager.json
+
+      - name: Install flatpak-builder
+        run: |
+          sudo apt update
+          sudo apt install -y flatpak flatpak-builder elfutils
+          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y --noninteractive flathub org.gnome.Sdk//50 org.gnome.Platform//50
+
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: ZTManager-flatpak.flatpak
+          manifest-path: io.github.riemarukarurosu.ZTManager.json
+          cache-key: flatpak-builder-${{ github.sha }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flatpak
+          path: ZTManager-*.flatpak
+
+  release:
+    name: Create GitHub Release
+    needs: [tag, appimage, rpm, flatpak]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download AppImage
+        uses: actions/download-artifact@v4
+        with:
+          name: appimage
+
+      - name: Download RPM packages
+        uses: actions/download-artifact@v4
+        with:
+          name: rpm
+
+      - name: Download Flatpak
+        uses: actions/download-artifact@v4
+        with:
+          name: flatpak
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.tag.outputs.version }}
+          name: ZT Manager v${{ needs.tag.outputs.version }}
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: true
+          files: |
+            ZTManager-*-appimage-x86_64.AppImage
+            *.noarch.rpm
+            ZTManager-*.flatpak
+
+  copr:
+    name: Submit to COPR
+    needs: [tag, release]
+    if: ${{ inputs.submit_copr }}
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:42
+    steps:
+      - name: Install copr-cli
+        run: dnf install -y copr-cli
+
+      - name: Download SRPM
+        uses: actions/download-artifact@v4
+        with:
+          name: rpm
+
+      - name: Configure COPR credentials
+        run: |
+          mkdir -p ~/.config
+          printf '[copr-cli]\nlogin = %s\nusername = %s\ntoken = %s\ncopr_url = https://copr.fedorainfracloud.org\n' \
+            "${{ secrets.COPR_LOGIN }}" \
+            "${{ secrets.COPR_USERNAME }}" \
+            "${{ secrets.COPR_TOKEN }}" > ~/.config/copr
+
+      - name: Submit SRPM to COPR
+        run: |
+          SRPM=$(ls *.src.rpm | head -1)
+          copr-cli build "${{ secrets.COPR_USERNAME }}/ZT-Manager" "$SRPM"
