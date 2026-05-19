@@ -92,7 +92,10 @@ jobs:
           DESKTOP=$(find AppDir/usr/share/applications -name "*.desktop" | head -1)
           [ -n "$DESKTOP" ] && cp "$DESKTOP" AppDir/ || true
           SVG=$(find AppDir/usr/share/icons -name "io.github.riemarukarurosu.ZTManager.svg" | head -1)
-          [ -n "$SVG" ] && cp "$SVG" AppDir/io.github.riemarukarurosu.ZTManager.svg || true
+          if [ -n "$SVG" ]; then
+            cp "$SVG" AppDir/
+            cp "$SVG" AppDir/io.github.riemarukarurosu.ZTManager.svg
+          fi
           PNG=$(find AppDir/usr/share/icons -name "*.png" | grep apps | head -1)
           [ -n "$PNG" ] && cp "$PNG" AppDir/io.github.riemarukarurosu.ZTManager.png || true
 
@@ -124,6 +127,7 @@ jobs:
       - name: Set version from tag
         run: |
           sed -i "s/^\([[:space:]]*\)version: '[^']*'/\1version: '${{ needs.tag.outputs.version }}'/" meson.build
+          sed -i "s/^%global app_version .*/%global app_version ${{ needs.tag.outputs.version }}/" packaging/ztmanager.spec
 
       - name: Install build dependencies
         run: |

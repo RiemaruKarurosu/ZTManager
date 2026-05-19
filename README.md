@@ -3,8 +3,15 @@
 <p align="center"><img src="data/icons/hicolor/scalable/apps/io.github.riemarukarurosu.ZTManager.svg" width="100" height="100"></p> 
 <div align="center">
      
-  <a href="">[![Licence](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)</a>
-  <a href="">[![Version](https://img.shields.io/badge/Version-2.0.2-green)](https://github.com/RiemaruKarurosu/ZTManager/releases)</a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0">
+    <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="Licence">
+  </a>
+  <a href="https://github.com/RiemaruKarurosu/ZTManager/releases">
+    <img src="https://img.shields.io/github/v/release/RiemaruKarurosu/ZTManager?color=green&label=Version" alt="Version">
+  </a>
+  <a href="https://github.com/RiemaruKarurosu/ZTManager/releases">
+    <img src="https://img.shields.io/github/v/release/RiemaruKarurosu/ZTManager?include_prereleases&color=orange&label=Pre-release" alt="Pre-release">
+  </a>
     
 </div>
 
