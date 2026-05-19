@@ -14,13 +14,14 @@ class PreferencesSettings:
     def __init__(self, zerotier_window, application):
         self.window_zerotier = zerotier_window
         self.zerotier = zerotier_window.ztlib
-        window = Adw.PreferencesWindow(application=application)
+        self.pref_window = Adw.PreferencesWindow(application=application)
+        window = self.pref_window
         page = Adw.PreferencesPage()
 
         # Auth Mode
         auth_group = Adw.PreferencesGroup()
         auth_group.set_title(_("Authentication"))
-        
+
         # Token Input
         self.token_row = Adw.PasswordEntryRow.new()
         self.token_row.set_title(_("Token X-ZT1-Auth"))
@@ -28,7 +29,19 @@ class PreferencesSettings:
             self.token_row.set_text(self.zerotier.api_token)
         self.token_row.connect("changed", self.on_token_input_changed)
         auth_group.add(self.token_row)
-        
+
+        # Auto-detect token from system
+        auto_row = Adw.ActionRow.new()
+        auto_row.set_title(_("Auto-detect Token"))
+        auto_row.set_subtitle(_("Read token from /var/lib/zerotier-one/authtoken.secret (requires administrator password)"))
+
+        auto_btn = Gtk.Button(label=_("Detect"))
+        auto_btn.set_valign(Gtk.Align.CENTER)
+        auto_btn.add_css_class("suggested-action")
+        auto_btn.connect("clicked", self.on_auto_detect_token)
+        auto_row.add_suffix(auto_btn)
+        auth_group.add(auto_row)
+
         page.add(auth_group)
 
         # Zerotier Service
@@ -80,10 +93,21 @@ class PreferencesSettings:
     def verify_token(self, token):
         return self.zerotier.check_token(token)
 
+    def on_auto_detect_token(self, button):
+        token = self.zerotier.read_system_token()
+        if token:
+            self.token_row.set_text(token)
+            toast = Adw.Toast.new(_("Token detected and applied successfully"))
+            toast.set_timeout(3)
+            self.pref_window.add_toast(toast)
+        else:
+            toast = Adw.Toast.new(_("Could not read system token. Is ZeroTier installed?"))
+            toast.set_timeout(4)
+            self.pref_window.add_toast(toast)
+
     def on_token_input_changed(self, entry):
         token = entry.get_text()
         if self.verify_token(token):
-            print(f"Token verificado: {token}")
             self.zerotier.api_token = token
             self.zerotier.headers = {'X-ZT1-Auth': f'{token}'}
             self.zerotier.save_token()

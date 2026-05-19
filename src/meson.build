@@ -12,7 +12,7 @@ gnome.compile_resources('ztmanager',
 python = import('python')
 
 conf = configuration_data()
-conf.set('PYTHON', python.find_installation('python3').path())
+conf.set('PYTHON', python.find_installation('python3').full_path())
 conf.set('VERSION', meson.project_version())
 conf.set('localedir', get_option('prefix') / get_option('localedir'))
 conf.set('pkgdatadir', pkgdatadir)
@@ -23,7 +23,7 @@ configure_file(
   configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
-  install_mode: 'r-xr--r--'
+  install_mode: 'rwxr-xr-x'
 )
 
 ztmanager_sources = [
@@ -32,6 +32,7 @@ ztmanager_sources = [
   'window.py',
   'zerotierlib.py',
   'preferences.py',
+  'installer.py',
 ]
 
 install_data(ztmanager_sources, install_dir: moduledir)

@@ -1,6 +1,6 @@
 # window.py
 #
-# Copyright 2024 Riemaru
+# Copyright 2026 Riemaru Karurosu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GLib
 from ztmanager.zerotierlib import *
+from .installer import ZeroTierInstallerDialog
 from . import _
 
 class NewNetwork(Gtk.Dialog):
@@ -142,9 +143,10 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
             return True
         else:
             self.my_infobar.set_visible(True)
-            self.install_zerotier_button.set_visible(False)
-            if not self.ztlib.is_installed():
-                self.my_label_infobar.set_label(_("ZeroTier-One is not installed on your system. Please install it to use this app."))
+            is_installed = self.ztlib.is_installed()
+            self.install_zerotier_button.set_visible(not is_installed)
+            if not is_installed:
+                self.my_label_infobar.set_label(_("ZeroTier-One is not installed on your system."))
             elif not self.ztlib.api_token:
                 self.my_label_infobar.set_label(_("No token provided. Please go to Preferences and enter a valid X-ZT1-Auth Token."))
             else:
@@ -156,7 +158,8 @@ class ZerotiergtkWindow(Adw.ApplicationWindow):
         peers_dialog.present()
 
     def on_install_zerotier_clicked(self, button):
-        pass
+        dialog = ZeroTierInstallerDialog(self, on_install_complete=self.on_check_lib)
+        dialog.present()
 
     def on_service_set(self, status):
         status = self.ztlib.service(status)

@@ -1,6 +1,6 @@
 # main.py
 #
-# Copyright 2024 Riemaru
+# Copyright 2026 Riemaru Karurosu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,9 @@ import os
 import sys
 
 DOMAIN = 'ztmanager'
-# Use the installation prefix for locales, usually /app/share/locale in Flatpak
 LOCALEDIR = os.path.join(os.path.dirname(__file__), '..', 'share', 'locale')
 if not os.path.exists(LOCALEDIR):
-    LOCALEDIR = '/app/share/locale'
+    LOCALEDIR = '/usr/share/locale'
 
 gettext.bindtextdomain(DOMAIN, LOCALEDIR)
 gettext.textdomain(DOMAIN)

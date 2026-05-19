@@ -29,6 +29,12 @@ VERSION = '@VERSION@'
 pkgdatadir = '@pkgdatadir@'
 localedir = '@localedir@'
 
+# Support AppImage: APPDIR is set at runtime by the AppRun script
+_appdir = os.environ.get('APPDIR', '')
+if _appdir:
+    pkgdatadir = _appdir + pkgdatadir
+    localedir = _appdir + localedir
+
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 locale.bindtextdomain('ztmanager', localedir)
