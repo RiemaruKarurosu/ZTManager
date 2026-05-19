@@ -32,6 +32,7 @@ ZeroTier networks through a clean Adwaita-style interface.
 
 %prep
 %autosetup -n ZTManager-%{app_version}
+%py3_shebang_fix .
 
 %build
 meson setup _build \
