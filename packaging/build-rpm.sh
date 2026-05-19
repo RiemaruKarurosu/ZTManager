@@ -23,7 +23,7 @@ tar --exclude='.git' \
     --exclude='*.pyc' \
     --exclude='*.pyo' \
     -czf "$HOME/rpmbuild/SOURCES/v$VERSION.tar.gz" \
-    --transform "s|^\.|ZT-Manager-$VERSION|" \
+    --transform "s|^\.|ZTManager-$VERSION|" \
     .
 
 cp "$SCRIPT_DIR/ztmanager.spec" "$HOME/rpmbuild/SPECS/ztmanager.spec"

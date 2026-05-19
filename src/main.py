@@ -72,8 +72,8 @@ class ZerotierGtkApplication(Adw.Application):
                                 developers=['Riemaru Karurosu'],
                                 copyright=_('© 2026 Riemaru Karurosu'),
                                 license_type=Gtk.License.GPL_3_0,
-                                website='https://github.com/RiemaruKarurosu/ZT-Manager',
-                                issue_url='https://github.com/RiemaruKarurosu/ZT-Manager/issues')
+                                website='https://github.com/RiemaruKarurosu/ZTManager',
+                                issue_url='https://github.com/RiemaruKarurosu/ZTManager/issues')
         about.present()
 
     def on_preferences_action(self, widget, unused):

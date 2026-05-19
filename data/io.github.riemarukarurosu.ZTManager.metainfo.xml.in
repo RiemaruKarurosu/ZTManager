@@ -36,14 +36,14 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZT-Manager/main/screenshots/main.png</image>
+      <image>https://raw.githubusercontent.com/RiemaruKarurosu/ZTManager/main/screenshots/main.png</image>
       <caption>The main network list view.</caption>
     </screenshot>
   </screenshots>
 
-  <url type="homepage">https://github.com/RiemaruKarurosu/ZT-Manager</url>
-  <url type="bugtracker">https://github.com/RiemaruKarurosu/ZT-Manager/issues</url>
-  <url type="vcs-browser">https://github.com/RiemaruKarurosu/ZT-Manager</url>
+  <url type="homepage">https://github.com/RiemaruKarurosu/ZTManager</url>
+  <url type="bugtracker">https://github.com/RiemaruKarurosu/ZTManager/issues</url>
+  <url type="vcs-browser">https://github.com/RiemaruKarurosu/ZTManager</url>
 
   <releases>
     <release version="2.0.2" date="2026-05-12">

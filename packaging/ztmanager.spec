@@ -5,8 +5,8 @@ Version:        %{app_version}
 Release:        1%{?dist}
 Summary:        GTK4 graphical interface for ZeroTier networks
 License:        GPL-3.0-or-later
-URL:            https://github.com/RiemaruKarurosu/ZT-Manager
-Source0:        https://github.com/RiemaruKarurosu/ZT-Manager/archive/refs/tags/v%{app_version}.tar.gz
+URL:            https://github.com/RiemaruKarurosu/ZTManager
+Source0:        https://github.com/RiemaruKarurosu/ZTManager/archive/refs/tags/v%{app_version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  ninja-build
@@ -31,7 +31,7 @@ virtual networks on Linux. It allows you to join, leave, and configure
 ZeroTier networks through a clean Adwaita-style interface.
 
 %prep
-%autosetup -n ZT-Manager-%{app_version}
+%autosetup -n ZTManager-%{app_version}
 
 %build
 meson setup _build \

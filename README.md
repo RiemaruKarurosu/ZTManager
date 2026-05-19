@@ -4,7 +4,7 @@
 <div align="center">
      
   <a href="">[![Licence](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)</a>
-  <a href="">[![Version](https://img.shields.io/badge/Version-2.0.2-green)](https://github.com/RiemaruKarurosu/ZT-Manager/releases)</a>
+  <a href="">[![Version](https://img.shields.io/badge/Version-2.0.2-green)](https://github.com/RiemaruKarurosu/ZTManager/releases)</a>
     
 </div>
 
@@ -26,7 +26,7 @@ If you desire to try a solution for managing ZeroTier networks, you can consider
 
 ## Installation
 
-We provide a Flatpak package for easy installation [here](https://github.com/RiemaruKarurosu/ZT-Manager/releases). Additionally, you can find the rpm package for installation on Fedora [here](https://github.com/RiemaruKarurosu/ZeroTier-GTK/releases). Or you can use the appimage [here](https://github.com/RiemaruKarurosu/ZT-Manager/releases).
+We provide a Flatpak package for easy installation [here](https://github.com/RiemaruKarurosu/ZTManager/releases). Additionally, you can find the rpm package for installation on Fedora [here](https://github.com/RiemaruKarurosu/ZeroTier-GTK/releases). Or you can use the appimage [here](https://github.com/RiemaruKarurosu/ZTManager/releases).
 
 ## Screenshots
 

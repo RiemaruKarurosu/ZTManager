@@ -142,7 +142,7 @@ jobs:
           tar --exclude='.git' --exclude='.venv' --exclude='dist' \
               --exclude='__pycache__' --exclude='*.pyc' --exclude='*.pyo' \
               -czf "${RPMBUILD}/SOURCES/v${VERSION}.tar.gz" \
-              --transform "s|^\.|ZT-Manager-${VERSION}|" .
+              --transform "s|^\.|ZTManager-${VERSION}|" .
           cp packaging/ztmanager.spec "${RPMBUILD}/SPECS/ztmanager.spec"
 
       - name: Build RPM and SRPM
@@ -266,4 +266,4 @@ jobs:
       - name: Submit SRPM to COPR
         run: |
           SRPM=$(ls *.src.rpm | head -1)
-          copr-cli build "${{ secrets.COPR_USERNAME }}/ZT-Manager" "$SRPM"
+          copr-cli build "${{ secrets.COPR_USERNAME }}/ZTManager" "$SRPM"
