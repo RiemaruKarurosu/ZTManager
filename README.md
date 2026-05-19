@@ -8,7 +8,7 @@
     
 </div>
 
-ZT Manager is a another GTK4/Libadwaita client for ZeroTier designed for GNOME users.
+ZT Manager is yet another GTK4/Libadwaita client for ZeroTier designed for GNOME users.
 
 ## Features
 - [x] GTK4 / Libadwaita interface.
